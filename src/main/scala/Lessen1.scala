@@ -43,5 +43,5 @@ object Lessen1 {
   /**
    * 5 times loop.
    */
-  def forFiveTimes() = for (i <- 1 to 5) println("Hello World!")
+  def forFiveTimes() { for (i <- 1 to 5) println("Hello World!") }
 }
