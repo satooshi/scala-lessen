@@ -15,6 +15,8 @@ object Lessen1 {
     //fiveTimes()
     //recursiveFiveTimes(5)
     forFiveTimes()
+    //whileFiveTimes()
+    //doWhileFiveTimes()
   }
 
   /**
@@ -41,7 +43,31 @@ object Lessen1 {
   }
 
   /**
-   * 5 times loop.
+   * 5 times for loop.
    */
   def forFiveTimes() { for (i <- 1 to 5) println("Hello World!") }
+
+  /**
+   * 5 times while loop.
+   */
+  def whileFiveTimes() {
+    var i = 1
+
+    while (i <= 5) {
+      println("Hello World!")
+      i += 1
+    }
+  }
+
+  /**
+   * 5 times do-while loop.
+   */
+  def doWhileFiveTimes() {
+    var i = 1
+
+    do {
+      println("Hello World!")
+      i += 1
+    } while (i <= 5)
+  }
 }
