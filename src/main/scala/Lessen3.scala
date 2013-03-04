@@ -30,8 +30,10 @@ object Lessen3 {
   }
 
   /**
-   * @param i
-   * @return
+   * Return whether the target number is the prime number.
+   *
+   * @param i Target number.
+   * @return true if the target number is the prime number, false otherwise.
    */
   def isPrime(i: Int): Boolean = {
     if (i <= 1) false
@@ -44,21 +46,23 @@ object Lessen3 {
   }
 
   /**
-   * @param primes 素数リスト
-   * @param range  探索範囲
-   * @return
+   * Return Prime numbers.
+   *
+   * @param primes Prime numbers.
+   * @param range  Search range.
+   * @return Prime numbers.
    */
   def searchPrimeNumbers(primes: List[Int], range: Seq[Int]): List[Int] = {
     // step 3
     // 前のステップで素数リストに加えられた数の全ての倍数を、探索リストから削除する。
-    val candidateRange = range.filter(_ % primes.last != 0)
+    val candidates = range.filter { _ % primes.last != 0 }
 
     // step 4
     // 探索リストの最大値が素数リストの最大値の平方よりも小さい場合、素数リストおよび探索リストに残っている数が素数となる。
     // 探索リストの最大値が素数リストの最大値の平方よりも大きい場合、ステップ 2 に戻る。
-    if (math.pow(primes.max, 2) >= candidateRange.max) primes ::: candidateRange.toList
+    if (candidates.max <= math.pow(primes.max, 2)) primes ::: candidates.toList
     // step 2
     // リストの先頭の数を素数リストに記録する。
-    else searchPrimeNumbers(primes ::: List(candidateRange.head), candidateRange)
+    else searchPrimeNumbers(primes ::: List(candidates.head), candidates)
   }
 }
