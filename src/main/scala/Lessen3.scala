@@ -76,6 +76,4 @@ object Lessen3 {
     // リストの先頭の数を素数リストに記録する。
     search(List(2), 2 to max)
   }
-
-
 }

@@ -21,9 +21,10 @@ package main.scala
  */
 object Lessen2 {
   def main(args: Array[String]) {
-    //for (i <- 1 to 99) println(fizzBuzz(i))
+    for (i <- 1 to 99) println(fizzBuzz(i))
     //for (i <- 1 to 99) println(fizzBuzz2(i))
-    fizzBuzz3(99)
+    //fizzBuzz3(99)
+    //for (i <- 1 to 99) println(fizzBuzz4(i))
   }
 
   /**
@@ -32,14 +33,14 @@ object Lessen2 {
    * @param i
    * @return
    */
-  def fizzBuzz(i: Int): Any = {
+  def fizzBuzz(i: Int): String = {
     val fizz = i % 3 == 0
     val buzz = i % 5 == 0
 
     if (fizz && buzz) "FizzBuzz"
     else if (fizz) "Fizz"
     else if (buzz) "Buzz"
-    else i
+    else i.toString()
   }
 
   /**
@@ -48,13 +49,13 @@ object Lessen2 {
    * @param i
    * @return
    */
-  def fizzBuzz2(i: Int): Any = {
+  def fizzBuzz2(i: Int): String = {
     var s = ""
 
     if (i % 3 == 0) s += "Fizz"
     if (i % 5 == 0) s += "Buzz"
 
-    if (s.isEmpty) i else s
+    if (s.isEmpty) i.toString() else s
   }
 
   /**
@@ -71,8 +72,21 @@ object Lessen2 {
     case i if i % 15 == 0 => "FizzBuzz"
     case i if i % 3 == 0 => "Fizz"
     case i if i % 5 == 0 => "Buzz"
-    case i => i
+    case _ => i
   } foreach {
     s => println(s)
+  }
+
+  /**
+   * pattern match
+   *
+   * @param i
+   * @return
+   */
+  def fizzBuzz4(i: Int) = i match {
+    case i if i % 15 == 0 => "FizzBuzz"
+    case i if i % 3 == 0 => "Fizz"
+    case i if i % 5 == 0 => "Buzz"
+    case _ => i.toString()
   }
 }
