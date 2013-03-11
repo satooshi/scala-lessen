@@ -1,105 +1,104 @@
 package main.scala
 
-import collection.mutable.Stack
-import collection.immutable.Map
-
 /**
- * Lessen 4.
+ * Lessen3.
  *
  * http://vipprog.net/wiki/exercise.html
  *
- * Tower of Hanoi
+ * 与えられた数が素数かどうか調べる
+ * あるいは与えられた数までの素数を列挙する
+ *
+ * エラトステネスの篩でやってみた
+ * http://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9
+ *
+ * i = 11
+ * List(2, 3, 5, 7, 11)
+ * true
+ *
+ * i = 100
+ * List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)
+ * false
  */
 object Lessen4 {
   def main(args: Array[String]) {
-    val i = 20
-    //val solver = new SimpleHanoiSolver
-    val solver = new HanoiSolver
-    solver.solve(i)
+    val i = 10000
+    // list of prime numbers ranging from 2 to i
+    println(PrimeNumber.getList(i))
+
+    // whether argument i is the prime number
+    //println(PrimeNumber.isPrimeNumber(i))
+
+    println("hoge")
+
+    timer(PrimeNumber.isPrimeNumber2(i))
+    timer(PrimeNumber.isPrimeNumber(i))
+
+    timer(PrimeNumber.isPrimeNumber2(i))
+    timer(PrimeNumber.isPrimeNumber(i))
+
+    timer(PrimeNumber.isPrimeNumber2(i))
+    timer(PrimeNumber.isPrimeNumber(i))
+  }
+
+  def timer(f: => Unit) {
+    System.gc
+    val start = System.nanoTime
+    f
+    println("Elapsed time: %d".format(System.nanoTime - start))
   }
 }
 
-class SimpleHanoiSolver {
-  def solve(n: Int) {
-    move(n, "A", "B", "C")
-  }
+object PrimeNumber {
+  /**
+   * Return whether the target number is the prime number.
+   *
+   * @param i Target number.
+   * @return true if the target number is the prime number, false otherwise.
+   */
+  def isPrimeNumber(i: Int) = getList(i).contains(i)
 
-  def move(n: Int, a: String, b: String, c: String) {
-    if (n > 0) {
-      move(n-1, a, c, b)
-      println("move disk %d from %s to %s".format(n, a, c))
-      move(n-1, b, a, c)
-    }
-  }
-}
-
-class HanoiSolver {
-  def solve(n: Int) {
-    val state = new State(n)
-
-    state.printState()
-    move(state, n, "A", "B", "C")
-  }
-
-  private
-  def move(state: State, n: Int, a: String, b: String, c: String) {
-    if (n > 0) {
-      move(state, n-1, a, c, b)
-      state.move(a, c)
-      move(state, n-1, b, a, c)
-    }
-  }
-}
-
-class State(n: Int, pegs: Map[String, Stack[Int]]) {
-  var step = 0
-
-  def this(n: Int) = {
-    this(n, Map("A" -> Stack[Int](), "B" -> Stack[Int](), "C" -> Stack[Int]()))
-    clear(n)
+  /**
+   * Return prime numbers list.
+   *
+   * @param max Maximum number to search prime numbers.
+   * @return Prime numbers.
+   */
+  def getList(max: Int) = max match {
+    case max if max <= 1 => List()
+    case max if max == 2 => List(2)
+    // step 1
+    // 整数を最初の素数である 2 から昇順で探索リストに羅列する。
+    // step 2
+    // リストの先頭の数を素数リストに記録する。
+    case _ => search(List(2), 2 to max)
   }
 
   /**
-   * Clear all disks from pegs and fill initial disks to peg "A"
-   * @param n
+   * Return prime numbers.
+   *
+   * @param primes Prime numbers.
+   * @param range  Search range.
+   * @return Prime numbers.
    */
-  def clear(n: Int) {
-    pegs("A").clear()
-    pegs("B").clear()
-    pegs("C").clear()
-
-    // fill initial disks to peg "A"
-    for (i <- (1 to n).reverse) pegs("A").push(i)
-  }
-
-  def move(a: String, b: String) {
-    val disk = moveDisk(pegs(a), pegs(b))
-
-    if (disk != 0) {
-      printResult(disk, a, b)
-    }
-  }
-
   private
-  def moveDisk(from: Stack[Int], to: Stack[Int]): Int = {
-    if (to.length == 0 || from.head < to.head) to.push(from.pop()).head
-    // exception is better
-    // but simply return 0
-    else 0
+  def search(primes: List[Int], range: Seq[Int]): List[Int] = range.filter {
+    // step 3
+    // 前のステップで素数リストに加えられた数の全ての倍数を、探索リストから削除する。
+    _ % primes.last != 0
+  } match {
+    // step 4
+    // 探索リストの最大値が素数リストの最大値の平方よりも小さい場合、素数リストおよび探索リストに残っている数が素数となる。
+    // 探索リストの最大値が素数リストの最大値の平方よりも大きい場合、ステップ 2 に戻る。
+    case candidates if candidates.max <= math.pow(primes.max, 2) => primes ::: candidates.toList
+    // step 2
+    // リストの先頭の数を素数リストに記録する。
+    case candidates => search(primes ::: List(candidates.head), candidates)
   }
 
-  private
-  def printResult(disk: Int, a: String, b: String) {
-    println("move disk %d from %s to %s".format(disk, a, b))
-    step += 1
-    printState()
-  }
 
-  def printState() {
-    println("[step %d]".format(step))
-    println("A: " + pegs("A"))
-    println("B: " + pegs("B"))
-    println("C: " + pegs("C"))
-    println("")
+  def isPrimeNumber2(i: Int) = i match {
+    case i if i <= 1 => false
+    case i if i == 2 => true
+    case _           => 2 to i forall { i % _ != 0 }
   }
 }
