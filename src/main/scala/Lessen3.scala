@@ -9,7 +9,7 @@ object Lessen3 {
     try {
       val i = args(0).toInt
 
-      if (i > 0) 1 to i foreach { i => println("Hello World! %d".format(i)) }
+      if (i > 0) for (n <- 1 to i) println("Hello World! %d".format(n))
       else println("arg1: Int > 0")
     } catch {
       case e: ArrayIndexOutOfBoundsException => println("arg1 is missing")
