@@ -6,21 +6,15 @@ package main.scala
  */
 object Lessen1_1 {
   def main(args: Array[String]) {
-    if (args.length == 0) {
-      println("arg1: Int > 0")
-      return
-    }
-
     try {
-      val arg1 = args(0).toInt
+      val i = args(0).toInt
 
-      if (arg1 > 0) forManyTimes(arg1)
+      if (i > 0) 1 to i foreach { i => println("Hello World! %d".format(i)) }
       else println("arg1: Int > 0")
     } catch {
-      case e: NumberFormatException => println("arg1: Int > 0")
-      case e: Throwable => println("failed something")
+      case e: ArrayIndexOutOfBoundsException => println("arg1 is missing")
+      case e: NumberFormatException          => println("arg1: Int")
+      case e: Throwable                      => println("failed something")
     }
   }
-
-  def forManyTimes(i: Int) = for (i <- 1 to i) println("Hello World! %d".format(i))
 }
