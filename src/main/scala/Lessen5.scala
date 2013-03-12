@@ -1,7 +1,6 @@
 package main.scala
 
-import collection.mutable.Stack
-import collection.immutable.Map
+import collection.mutable
 
 /**
  * Lessen 4.
@@ -12,18 +11,34 @@ import collection.immutable.Map
  */
 object Lessen5 {
   def main(args: Array[String]) {
-    val i = 10
+    val i = 4
     //val solver = new SimpleHanoiSolver
     val solver = new HanoiSolver
     solver.solve(i)
   }
 }
 
+/**
+ * Simple solver.
+ */
 class SimpleHanoiSolver {
+  /**
+   * Solve tower of Hanoi.
+   *
+   * @param n Number of disks.
+   */
   def solve(n: Int) {
     move(n, "A", "B", "C")
   }
 
+  /**
+   * Move disk from peg a to peg c through peg b.
+   *
+   * @param n Number of disks.
+   * @param a Peg name from.
+   * @param b Peg name through.
+   * @param c Peg name to.
+   */
   def move(n: Int, a: String, b: String, c: String) {
     if (n > 0) {
       move(n-1, a, c, b)
@@ -33,7 +48,15 @@ class SimpleHanoiSolver {
   }
 }
 
+/**
+ * Tower of Hanoi solver with pegs' state.
+ */
 class HanoiSolver {
+  /**
+   * Solve tower of Hanoi.
+   *
+   * @param n
+   */
   def solve(n: Int) {
     val state = new State(n)
 
@@ -41,21 +64,42 @@ class HanoiSolver {
     move(state, n, "A", "B", "C")
   }
 
+  /**
+   * Move disk from peg a to peg c through peg b.
+   *
+   * @param state Pegs' state.
+   * @param n     Number of disks.
+   * @param a     Peg name from.
+   * @param b     Peg name through.
+   * @param c     Peg name to.
+   */
   private
   def move(state: State, n: Int, a: String, b: String, c: String) {
     if (n > 0) {
       move(state, n-1, a, c, b)
-      state.move(a, c)
+      val disk = state.move(a, c)
+      state.printResult(disk, a, c)
       move(state, n-1, b, a, c)
     }
   }
 }
 
-class State(n: Int, pegs: Map[String, Stack[Int]]) {
+/**
+ * Hanoi state.
+ *
+ * @param n Number of disks.
+ * @param pegs Pegs map.
+ */
+class State(n: Int, pegs: Map[String, mutable.Stack[Int]]) {
   var step = 0
 
+  /**
+   * Constructor.
+   *
+   * @param n Number of disks.
+   */
   def this(n: Int) = {
-    this(n, Map("A" -> Stack[Int](), "B" -> Stack[Int](), "C" -> Stack[Int]()))
+    this(n, Map("A" -> mutable.Stack[Int](), "B" -> mutable.Stack[Int](), "C" -> mutable.Stack[Int]()))
     clear(n)
   }
 
@@ -64,37 +108,51 @@ class State(n: Int, pegs: Map[String, Stack[Int]]) {
    * @param n
    */
   def clear(n: Int) {
+    step = 0
     pegs("A").clear()
     pegs("B").clear()
     pegs("C").clear()
 
     // fill initial disks to peg "A"
-    for (i <- (1 to n).reverse) pegs("A").push(i)
+    (1 to n).reverse.foreach(pegs("A").push(_))
   }
 
-  def move(a: String, b: String) {
-    val disk = moveDisk(pegs(a), pegs(b))
+  /**
+   * Move disk from peg name a to peg name b.
+   * @param a Peg name from
+   * @param b Peg name to
+   * @return
+   */
+  def move(a: String, b: String) = moveDisk(pegs(a), pegs(b))
 
-    if (disk != 0) {
-      printResult(disk, a, b)
+  /**
+   * Move disk.
+   * @param from Peg from
+   * @param to   Peg to
+   * @return
+   */
+  private
+  def moveDisk(from: mutable.Stack[Int], to: mutable.Stack[Int]) =
+    if (to.isEmpty || from.head < to.head) {
+      step += 1
+      to.push(from.pop()).head
     }
-  }
+    else throw new IllegalArgumentException
 
-  private
-  def moveDisk(from: Stack[Int], to: Stack[Int]): Int = {
-    if (to.length == 0 || from.head < to.head) to.push(from.pop()).head
-    // exception is better
-    // but simply return 0
-    else 0
-  }
-
-  private
+  /**
+   * Print move result
+   * @param disk
+   * @param a
+   * @param b
+   */
   def printResult(disk: Int, a: String, b: String) {
     println("move disk %d from %s to %s".format(disk, a, b))
-    step += 1
     printState()
   }
 
+  /**
+   * Print pegs' state
+   */
   def printState() {
     println("[step %d]".format(step))
     println("A: " + pegs("A"))
