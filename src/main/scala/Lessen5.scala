@@ -87,34 +87,34 @@ class HanoiSolver {
 /**
  * Hanoi state.
  *
- * @param numDisks Number of disks.
- * @param pegs     Pegs map.
+ * @param n Number of disks.
+ * @param pegs Pegs map.
  */
-class State(numDisks: Int, private val pegs: Map[String, mutable.Stack[Int]]) {
-  private var step = 0
+class State(n: Int, pegs: Map[String, mutable.Stack[Int]]) {
+  var step = 0
 
   /**
    * Constructor.
    *
-   * @param numDisks Number of disks.
+   * @param n Number of disks.
    */
-  def this(numDisks: Int) = {
-    this(numDisks, Map("A" -> mutable.Stack[Int](), "B" -> mutable.Stack[Int](), "C" -> mutable.Stack[Int]()))
-    clear()
+  def this(n: Int) = {
+    this(n, Map("A" -> mutable.Stack[Int](), "B" -> mutable.Stack[Int](), "C" -> mutable.Stack[Int]()))
+    clear(n)
   }
 
   /**
    * Clear all disks from pegs and fill initial disks to peg "A"
    * @param n
    */
-  def clear() {
+  def clear(n: Int) {
     step = 0
-
-    // remove all disks from pegs
-    foreachPegNames(pegs(_).clear())
+    pegs("A").clear()
+    pegs("B").clear()
+    pegs("C").clear()
 
     // fill initial disks to peg "A"
-    (1 to numDisks).reverse.foreach(pegs("A").push(_))
+    (1 to n).reverse.foreach(pegs("A").push(_))
   }
 
   /**
@@ -155,12 +155,9 @@ class State(numDisks: Int, private val pegs: Map[String, mutable.Stack[Int]]) {
    */
   def printState() {
     println("[step %d]".format(step))
-
-    foreachPegNames(name => println("%s: %s".format(name, pegs(name))))
-
+    println("A: " + pegs("A"))
+    println("B: " + pegs("B"))
+    println("C: " + pegs("C"))
     println("")
   }
-
-  private
-  def foreachPegNames(func: => String => Unit) { List("A", "B", "C").foreach(func) }
 }
