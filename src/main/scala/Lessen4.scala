@@ -65,7 +65,7 @@ object PrimeNumber {
   }
 
   /**
-   * Run Eratosthenes's sieve algorithm.
+   * Run Sieve of Eratosthenes algorithm.
    *
    * @param primes Prime numbers.
    * @param range  Candidate range.

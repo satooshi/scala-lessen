@@ -55,7 +55,7 @@ how to catch exception.
 
 ## Problem
 
-Eratosthenes's sieve
+Sieve of Eratosthenes
 
 ## Learn
 
