@@ -1,7 +1,5 @@
 package main.scala
 
-import collection.mutable
-
 /**
  * Lessen3.
  *
@@ -84,5 +82,119 @@ object PrimeNumber {
     // step 2
     // リストの先頭の数を素数リストに記録する。
     case candidates => eratosthenesSieve(primes ::: List(candidates.head), candidates)
+  }
+}
+
+object MyFirstPrimeNumber {
+  def toList(max: Int): List[Int] = {
+    // step1
+    val range = 2 to max
+
+    // step2
+    val list = List(range.head)
+
+    eratosthenesSieve(list, range)
+  }
+
+  private
+  def eratosthenesSieve(list: List[Int], range: Seq[Int]): List[Int] = {
+    // step3
+    val last = list.last
+    val range1 = range.filter(i => i % last != 0)
+
+    // step4
+    if (range1.max < math.pow(list.max, 2)) {
+      list ::: range1.toList
+    } else {
+      // back to step2
+      val list1 = list ::: List(range1.head)
+      // step3
+      eratosthenesSieve(list1, range1)
+    }
+  }
+}
+
+object MyFirstPrimeNumber2 {
+  def toList(max: Int): List[Int] = {
+    // step1
+    // step2
+    eratosthenesSieve(List(2), 2 to max)
+  }
+
+  private
+  def eratosthenesSieve(list: List[Int], range: Seq[Int]): List[Int] = {
+    // step3
+    val range1 = range.filter(i => i % list.last != 0)
+
+    // step4
+    if (range1.max < math.pow(list.max, 2)) {
+      list ::: range1.toList
+    } else {
+      // back to step2
+      // step3
+      eratosthenesSieve(list ::: List(range1.head), range1)
+    }
+  }
+}
+
+object MyFirstPrimeNumber3 {
+  def toList(max: Int): List[Int] = {
+    // step1
+    // step2
+    eratosthenesSieve(List(2), 2 to max)
+  }
+
+  private
+  def eratosthenesSieve(list: List[Int], range: Seq[Int]): List[Int] = range.filter {
+    // step3
+    _ % list.last != 0
+  } match {
+    // step4
+    case range1 if range1.max < math.pow(list.max, 2) => list ::: range1.toList
+    // back to step2
+    // step3
+    case range1 => eratosthenesSieve(list ::: List(range1.head), range1)
+  }
+}
+
+object MyFirstPrimeNumber4 {
+  def toList(max: Int): List[Int] = {
+    // step1
+    // step2
+    eratosthenesSieve(List(2), 2 to max)
+  }
+
+  private
+  def eratosthenesSieve(list: List[Int], range: Seq[Int]): List[Int] = range.filter {
+    // step3
+    _ % list.last != 0
+  } match {
+    // step4
+    case range1 if range1.max < math.pow(list.max, 2) => list ++ range1
+    // back to step2
+    // step3
+    case range1 => eratosthenesSieve(list ::: List(range1.head), range1)
+  }
+}
+
+object MyFirstPrimeNumber5 {
+  def toList(max: Int): List[Int] = max match {
+    case max if max <= 1 => List()
+    case max if max == 2 => List(2)
+    // step1
+    // step2
+    case _ => eratosthenesSieve(List(2), 2 to max)
+  }
+
+  private
+  def eratosthenesSieve(list: List[Int], range: Seq[Int]): List[Int] = range.filter {
+    // step3
+    _ % list.last != 0
+  } match {
+    // step4
+    case range1 if range1.max < math.pow(list.max, 2) => list ++ range1
+    // back to step2
+    // step3
+    case range1 => eratosthenesSieve(list ::: List(range1.head), range1)
   }
 }
