@@ -5,7 +5,7 @@ Learning Scala programming.
 
 # Lessen 1: loop
 
-[My blog post](http://blog.satooshi.jp/blog/2013/03/11/beginning-scala-programming3/) in Japanese.
+[My blog post](http://blog.satooshi.jp/blog/2013/03/04/beginning-scala-programming1/) in Japanese.
 
 ## Problem
 
@@ -38,7 +38,7 @@ how to use conditional control.
 
 # Lessen 3: try expressions
 
-[My blog post](http://blog.satooshi.jp/blog/2013/03/04/beginning-scala-programming1/) in Japanese.
+[My blog post](http://blog.satooshi.jp/blog/2013/03/11/beginning-scala-programming3/) in Japanese.
 
 ## Problem
 
@@ -52,6 +52,12 @@ how to catch exception.
 - `try-catch-finally`
 
 # Lessen 4: Collection class: List
+
+My blog posts in Japanese.
+
+- [part1](http://blog.satooshi.jp/blog/2013/03/12/beginning-scala-programming4/)
+- [part2](http://blog.satooshi.jp/blog/2013/03/13/beginning-scala-programming4-2/)
+- [part3](http://blog.satooshi.jp/blog/2013/03/14/beginning-scala-programming4-3/)
 
 ## Problem
 
