@@ -63,6 +63,7 @@ class HanoiSolver {
 
     state.printState()
     move(state, n, "A", "B", "C")
+    println(state.num)
   }
 
   /**
@@ -91,7 +92,7 @@ class HanoiSolver {
  * @param num  Number of disks.
  * @param pegs Pegs map.
  */
-class State(num: Int, pegs: Map[String, mutable.Stack[Int]]) {
+class State(val num: Int, val pegs: Map[String, mutable.Stack[Int]]) extends PegsContainer {
   var step = 0
 
   /**
@@ -159,7 +160,25 @@ class State(num: Int, pegs: Map[String, mutable.Stack[Int]]) {
     foreachPegName(name => println("%s: %s".format(name, pegs(name))))
     println("")
   }
+}
 
-  private
+trait PegsContainer {
   def foreachPegName(func: String => Unit) { List("A", "B", "C").foreach(func) }
+}
+
+class ConsolePrinter(state: State) extends PegsContainer {
+  def print() {
+
+  }
+
+  def printResult(disk: Int, step:Int, a: String, b: String) {
+    println("move disk %d from %s to %s".format(disk, a, b))
+    printState(step)
+  }
+
+  def printState(step: Int) {
+    println("[step %d]".format(step))
+    foreachPegName(name => println("%s: %s".format(name, state.pegs(name))))
+    println("")
+  }
 }
