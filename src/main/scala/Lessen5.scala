@@ -63,7 +63,6 @@ class HanoiSolver {
 
     state.printState()
     move(state, n, "A", "B", "C")
-    println(state.num)
   }
 
   /**
