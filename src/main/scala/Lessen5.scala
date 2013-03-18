@@ -11,7 +11,7 @@ import collection.mutable
  */
 object Lessen5 {
   def main(args: Array[String]) {
-    val i = 4
+    val i = 3
     //val solver = new SimpleHanoiSolver
     val solver = new HanoiSolver
     solver.solve(i)
@@ -39,6 +39,7 @@ class SimpleHanoiSolver {
    * @param b Peg name through.
    * @param c Peg name to.
    */
+  private
   def move(n: Int, a: String, b: String, c: String) {
     if (n > 0) {
       move(n-1, a, c, b)
@@ -87,34 +88,34 @@ class HanoiSolver {
 /**
  * Hanoi state.
  *
- * @param n Number of disks.
+ * @param num  Number of disks.
  * @param pegs Pegs map.
  */
-class State(n: Int, pegs: Map[String, mutable.Stack[Int]]) {
+class State(num: Int, pegs: Map[String, mutable.Stack[Int]]) {
   var step = 0
 
   /**
    * Constructor.
    *
-   * @param n Number of disks.
+   * @param num Number of disks.
    */
-  def this(n: Int) = {
-    this(n, Map("A" -> mutable.Stack[Int](), "B" -> mutable.Stack[Int](), "C" -> mutable.Stack[Int]()))
-    clear(n)
+  def this(num: Int) {
+    this(num, Map("A" -> mutable.Stack[Int](), "B" -> mutable.Stack[Int](), "C" -> mutable.Stack[Int]()))
+    clear(num)
   }
 
   /**
-   * Clear all disks from pegs and fill initial disks to peg "A"
-   * @param n
+   * Clear all disks from pegs and fill initial disks to peg "A".
+   *
+   * @param num Number of disks
    */
-  def clear(n: Int) {
+  def clear(num: Int) {
     step = 0
-    pegs("A").clear()
-    pegs("B").clear()
-    pegs("C").clear()
+
+    foreachPegName(pegs(_).clear())
 
     // fill initial disks to peg "A"
-    (1 to n).reverse.foreach(pegs("A").push(_))
+    (1 to num).reverse.foreach(pegs("A").push(_))
   }
 
   /**
@@ -155,9 +156,10 @@ class State(n: Int, pegs: Map[String, mutable.Stack[Int]]) {
    */
   def printState() {
     println("[step %d]".format(step))
-    println("A: " + pegs("A"))
-    println("B: " + pegs("B"))
-    println("C: " + pegs("C"))
+    foreachPegName(name => println("%s: %s".format(name, pegs(name))))
     println("")
   }
+
+  private
+  def foreachPegName(func: String => Unit) { List("A", "B", "C").foreach(func) }
 }
