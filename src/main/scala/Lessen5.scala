@@ -60,9 +60,10 @@ class HanoiSolver {
    */
   def solve(n: Int) {
     val state = new State(n)
+    val printer = new SimplePrinter(state)
 
-    state.printState()
-    move(state, n, "A", "B", "C")
+    printer.printState()
+    move(state, printer, n, "A", "B", "C")
   }
 
   /**
@@ -75,12 +76,12 @@ class HanoiSolver {
    * @param c     Peg name to.
    */
   private
-  def move(state: State, n: Int, a: String, b: String, c: String) {
+  def move(state: State, printer: StatePrinter, n: Int, a: String, b: String, c: String) {
     if (n > 0) {
-      move(state, n-1, a, c, b)
+      move(state, printer, n-1, a, c, b)
       val disk = state.move(a, c)
-      state.printResult(disk, a, c)
-      move(state, n-1, b, a, c)
+      printer.printResult(disk, a, c)
+      move(state, printer, n-1, b, a, c)
     }
   }
 }
@@ -133,31 +134,12 @@ class State(val num: Int, val pegs: Map[String, mutable.Stack[Int]]) extends Peg
    * @return
    */
   private
-  def moveDisk(from: mutable.Stack[Int], to: mutable.Stack[Int]) =
+  def moveDisk(from: mutable.Stack[Int], to: mutable.Stack[Int]) = {
     if (to.isEmpty || from.head < to.head) {
       step += 1
       to.push(from.pop()).head
     }
     else throw new IllegalArgumentException
-
-  /**
-   * Print move result
-   * @param disk
-   * @param a
-   * @param b
-   */
-  def printResult(disk: Int, a: String, b: String) {
-    println("move disk %d from %s to %s".format(disk, a, b))
-    printState()
-  }
-
-  /**
-   * Print pegs' state
-   */
-  def printState() {
-    println("[step %d]".format(step))
-    foreachPegName(name => println("%s: %s".format(name, pegs(name))))
-    println("")
   }
 }
 
@@ -165,18 +147,19 @@ trait PegsContainer {
   def foreachPegName(func: String => Unit) { List("A", "B", "C").foreach(func) }
 }
 
-class ConsolePrinter(state: State) extends PegsContainer {
-  def print() {
+abstract class StatePrinter {
+  def printResult(disk: Int, a: String, b: String)
+  def printState()
+}
 
-  }
-
-  def printResult(disk: Int, step:Int, a: String, b: String) {
+class SimplePrinter(state: State) extends StatePrinter with PegsContainer {
+  def printResult(disk: Int, a: String, b: String) {
     println("move disk %d from %s to %s".format(disk, a, b))
-    printState(step)
+    printState()
   }
 
-  def printState(step: Int) {
-    println("[step %d]".format(step))
+  def printState() {
+    println("[step %d]".format(state.step))
     foreachPegName(name => println("%s: %s".format(name, state.pegs(name))))
     println("")
   }
