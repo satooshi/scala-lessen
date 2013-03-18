@@ -1,7 +1,7 @@
 package main.scala
 
 /**
- * Lessen3.
+ * Lessen4.
  *
  * http://vipprog.net/wiki/exercise.html
  *

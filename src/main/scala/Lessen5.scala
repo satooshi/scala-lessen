@@ -3,7 +3,7 @@ package main.scala
 import collection.mutable
 
 /**
- * Lessen 4.
+ * Lessen5.
  *
  * http://vipprog.net/wiki/exercise.html
  *
