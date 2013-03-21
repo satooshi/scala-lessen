@@ -135,11 +135,9 @@ class State(val num: Int, val pegs: Map[String, mutable.Stack[Int]]) extends Peg
    */
   private
   def moveDisk(from: mutable.Stack[Int], to: mutable.Stack[Int]) = {
-    if (to.isEmpty || from.head < to.head) {
-      step += 1
-      to.push(from.pop()).head
-    }
-    else throw new IllegalArgumentException
+    require(to.isEmpty || from.head < to.head)
+    step += 1
+    to.push(from.pop()).head
   }
 }
 
